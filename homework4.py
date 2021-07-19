@@ -9,11 +9,12 @@
 tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
-    'LPAREN','RPAREN',
+    'LPAREN','RPAREN','POWER','WALRUS',
     )
 
 # Tokens
-
+t_POWER = r'\^'
+t_WALRUS = r':='
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
 t_TIMES   = r'\*'
@@ -24,7 +25,7 @@ t_RPAREN  = r'\)'
 t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
 def t_NUMBER(t):
-    r'\d+'
+    r'[\d_]+'
     try:
         t.value = int(t.value)
     except ValueError:
@@ -53,6 +54,8 @@ precedence = (
     ('left','PLUS','MINUS'),
     ('left','TIMES','DIVIDE'),
     ('right','UMINUS'),
+    ('right', 'POWER'),
+    ('right', 'WALRUS')
     )
 
 # dictionary of names
@@ -60,6 +63,10 @@ names = { }
 
 def p_statement_assign(t):
     'statement : NAME EQUALS expression'
+    names[t[1]] = t[3]
+
+def p_statement_assign(t):
+    'statement : NAME WALRUS expression'
     names[t[1]] = t[3]
 
 def p_statement_expr(t):
@@ -70,11 +77,13 @@ def p_expression_binop(t):
     '''expression : expression PLUS expression
                   | expression MINUS expression
                   | expression TIMES expression
-                  | expression DIVIDE expression'''
+                  | expression DIVIDE expression
+                  | expression POWER expression'''
     if t[2] == '+'  : t[0] = t[1] + t[3]
     elif t[2] == '-': t[0] = t[1] - t[3]
     elif t[2] == '*': t[0] = t[1] * t[3]
     elif t[2] == '/': t[0] = t[1] / t[3]
+    elif t[2] == '^': t[0] = t[1] ** t[3]
 
 def p_expression_uminus(t):
     'expression : MINUS expression %prec UMINUS'
