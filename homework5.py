@@ -2,20 +2,16 @@
 class Rat:
     num = 0
     dem = 0
-    def __init__(self, *inp):
-        if len(inp) == 2:
-            self.num,dem = self.two_args(inp)
-
-    def two_args(self,args):
-        x = 0
-        y = 0
-        if args[1] != 0:
-            x = args[0]
-            y = args[1]
-        else:
-            x = args[0]
-            y = 1
-        return x,y
+    def __init__(self, num = None,dem = None):
+       if num and dem:
+            self.num = num
+            self.dem = dem
+       elif num and not dem:
+            self.num = num
+            self.dem = 1
+       else:
+            self.num = 1
+            self.dem = 0
 
     def get_num():
         return self.num
@@ -27,16 +23,23 @@ class Rat:
     def set_d(d):
         self.dem = d
 
-    def rat_operator_plus(Rat):
+    def __add__(self,next_rat):
         t = Rat()
-        t.num = self.num * Rat.dem + dem * Rat.num
-        t.dem = self.dem * Rat.dem
+        t.num = self.num * next_rat.dem + self.dem * next_rat.num
+        t.dem = self.dem * next_rat.dem
         return t
 
     def __str__(self):
-        return self.num+'/'+self.dem
+        return str(self.num)+'/'+str(self.dem)
         
 def main():
     print ("hello")
+    X = Rat(3 ,4)
+    print(X)
+    Y = Rat(3)
+    print(Y)
+    Z = Rat()
+    print(Z)
+    print ( Y + X)
 if __name__ == "__main__":
     main()
