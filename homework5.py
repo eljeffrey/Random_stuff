@@ -10,8 +10,8 @@ class Rat:
             self.num = num
             self.dem = 1
        else:
-            self.num = 1
-            self.dem = 0
+            self.num = 0
+            self.dem = 1
 
     def get_num():
         return self.num
